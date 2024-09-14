@@ -40,7 +40,7 @@ const uploadImage = async (file) => {
 
 // Middleware to handle image uploads
 export const uploadMiddleware = (req, res, next) => {
-  upload.single('image')(req, res, async (err) => {
+  upload.single('imageUrl')(req, res, async (err) => {
     if (err) {
       return next(new ApplicationErrorHandler('Image upload failed', 400));
     }

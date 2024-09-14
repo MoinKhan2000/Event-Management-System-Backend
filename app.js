@@ -16,8 +16,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 // All the routes.
 app.get('/', (req, res) => { res.send("Welcome to the Event Management System!"); });
 app.use('/api/v1/user', userRouter)

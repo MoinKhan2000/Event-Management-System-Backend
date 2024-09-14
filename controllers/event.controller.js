@@ -17,11 +17,12 @@ class EventController {
   // Create a new event
   async createEvent(eventData) {
     try {
+
       const event = new EventModel(eventData);
       await event.save();
       return event;
     } catch (error) {
-      throw new ApplicationErrorHandler('Error creating event', 500);
+      throw new ApplicationErrorHandler(error.message || 'Error creating event', 500);
     }
   }
 
@@ -38,13 +39,19 @@ class EventController {
   // Get a single event by ID
   async getEventById(id) {
     try {
-      const event = await EventModel.findById(id).populate('attendees');
-      if (!event) throw new ApplicationErrorHandler('Event not found', 404);
+      const event = await EventModel.findById(id)
+        .populate('attendees')
+        .exec();
+      if (!event) {
+        throw new ApplicationErrorHandler('Event not found', 404);
+      }
       return event;
     } catch (error) {
-      throw new ApplicationErrorHandler('Error getting event by ID', 500);
+      // Handle errors and rethrow with a more specific message
+      throw new ApplicationErrorHandler(error.message || 'Error getting event by ID', 500);
     }
   }
+
 
   // Update an event by ID
   async updateEvent(id, updatedData) {
@@ -53,7 +60,7 @@ class EventController {
       if (!event) throw new ApplicationErrorHandler('Event not found', 404);
       return event;
     } catch (error) {
-      throw new ApplicationErrorHandler('Error updating event', 500);
+      throw new ApplicationErrorHandler(error.message || 'Error updating event', 500);
     }
   }
 
@@ -62,9 +69,10 @@ class EventController {
     try {
       const result = await EventModel.findByIdAndDelete(id);
       if (!result) throw new ApplicationErrorHandler('Event not found', 404);
+      return result
       return result;
     } catch (error) {
-      throw new ApplicationErrorHandler('Error deleting event', 500);
+      throw new ApplicationErrorHandler(error.message || 'Error deleting event', 500);
     }
   }
 
