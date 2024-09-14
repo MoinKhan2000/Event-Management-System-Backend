@@ -1,21 +1,19 @@
 import mongoose from 'mongoose';
 
-// Define the Attendee Schema
-const attendeeSchema = new mongoose.Schema({
-  eventId: {
+const inAppNotificationSchema = new mongoose.Schema({
+  event: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Event',
     required: true
   },
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  status: {
+  message: {
     type: String,
-    enum: ['attended', 'absent'],
-    default: 'attended'
+    required: true
   },
   createdAt: {
     type: Date,
@@ -23,6 +21,9 @@ const attendeeSchema = new mongoose.Schema({
   }
 });
 
-const AttendeeModel = mongoose.model('Attendee', attendeeSchema);
+const InAppNotification = mongoose.model('InAppNotification', inAppNotificationSchema);
 
-export default AttendeeModel;
+export default InAppNotification;
+
+
+

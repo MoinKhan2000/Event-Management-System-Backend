@@ -1,7 +1,8 @@
 import express from 'express';
+import ApplicationErrorHandler from './utils/errorHandler.js'
+import userRouter from './routes/user.router.js';
+import eventRouter from './routes/events.routes.js';
 const app = express();
-
-// Middleware to parse JSON request bodies
 app.use(express.json());
 
 // Middleware to parse URL query parameters
@@ -16,9 +17,16 @@ app.use((req, res, next) => {
 });
 
 
+
+// All the routes.
+app.get('/', (req, res) => { res.send("Welcome to the Event Management System!"); });
+app.use('/api/v1/user', userRouter)
+app.use('/api/v1/event', eventRouter)
+
 // Centralized Error Handling Middleware
 app.use((err, req, res, next) => {
   // Check if the error is an instance of ApplicationErrorHandler
+
   if (err instanceof ApplicationErrorHandler) {
     // Send a structured error response
     return res.status(err.code).json({
